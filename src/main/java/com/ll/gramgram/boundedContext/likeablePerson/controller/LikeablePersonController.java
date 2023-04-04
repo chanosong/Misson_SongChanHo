@@ -36,6 +36,13 @@ public class LikeablePersonController {
         private final int attractiveTypeCode;
     }
 
+    @AllArgsConstructor
+    @Getter
+    public static class DeleteForm {
+        private final String fromUsername;
+        private final String toUsername;
+    }
+
     @PostMapping("/add")
     public String add(@Valid AddForm addForm) {
         RsData<LikeablePerson> createRsData = likeablePersonService.like(rq.getMember(), addForm.getUsername(), addForm.getAttractiveTypeCode());
@@ -59,4 +66,5 @@ public class LikeablePersonController {
 
         return "usr/likeablePerson/list";
     }
+
 }
