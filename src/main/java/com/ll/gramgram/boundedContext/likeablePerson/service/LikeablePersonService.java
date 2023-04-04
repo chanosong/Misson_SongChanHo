@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +44,29 @@ public class LikeablePersonService {
         likeablePersonRepository.save(likeablePerson); // 저장
 
         return RsData.of("S-1", "입력하신 인스타유저(%s)를 호감상대로 등록되었습니다.".formatted(username), likeablePerson);
+    }
+
+    // 호감상대 취소
+    @Transactional
+    public RsData<LikeablePerson> unlike(Member member, String id) {
+        // 비정상적인 접근 차단
+        if (member.hasConnectedInstaMember() == false) {
+            return RsData.of("F-2", "먼저 본인의 인스타그램 아이디를 입력해야 합니다.");
+        }
+
+
+        Optional<LikeablePerson> opLikeablePerson = likeablePersonRepository.findById(Integer.parseInt(id));
+
+        // 이미 삭제된 호감 상대일 경우
+        if (!opLikeablePerson.isPresent()) {
+            return RsData.of("F-3", "이미 삭제된 호감상대입니다.");
+        }
+
+        // 삭제 가능한 상태인 경우 삭제
+        LikeablePerson likeablePerson = opLikeablePerson.get();
+        likeablePersonRepository.delete(likeablePerson);
+
+        return RsData.of("S-2", "해당 인스타유저(%s)를 호감상대에서 삭제하였습니다.".formatted(likeablePerson.getToInstaMemberUsername()));
     }
 
     public List<LikeablePerson> findByFromInstaMemberId(Long fromInstaMemberId) {
