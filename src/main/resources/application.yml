@@ -20,10 +20,11 @@ spring:
           google:
             clientId: 934648532215-jfj9uknpuh1kfuncllr24rdrmsk9jvs4.apps.googleusercontent.com
             client-secret: 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
-            client-name: Google
-            scope: profile,email
             redirect-uri: http://localhost:8080/login/oauth2/code/google
-            client-authentication-method: POST
+            client-name: Google
+            scope:
+              - email
+              - profile
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
