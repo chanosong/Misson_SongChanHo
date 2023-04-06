@@ -45,8 +45,8 @@
 
 
 
-  **참고: [Refactoring]**
+  **[Refactoring]**
 
-    - Refactoring 시 주로 다루어야 할 이슈들에 대해 리스팅합니다.
-    - 1차 리팩토링은 기능 개발을 종료한 후, 스스로 코드를 다시 천천히 읽어보면서 진행합니다.
-    - 2차 리팩토링은 피어리뷰를 통해 전달받은 다양한 의견과 피드백을 조율하여 진행합니다.
+    - API Secret Key들을 은닉한 것처럼 DB의 아이디/패스워드 또한 은닉
+    - LikeablePersonService에서 사용하는 findById를 메소드화하여 재사용성 증가
+    - /delete/{id}의 PathVariable의 타입을 String에서 DB와 같은 int로 변경
