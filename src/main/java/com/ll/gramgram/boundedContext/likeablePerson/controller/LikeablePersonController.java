@@ -60,7 +60,7 @@ public class LikeablePersonController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable String id) {
+    public String delete(@PathVariable int id) {
         RsData<LikeablePerson> deleteRsData = likeablePersonService.unlike(rq.getMember(), id);
 
         if (deleteRsData.isFail()) {

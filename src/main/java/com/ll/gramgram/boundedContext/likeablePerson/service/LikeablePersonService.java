@@ -48,14 +48,13 @@ public class LikeablePersonService {
 
     // 호감상대 취소
     @Transactional
-    public RsData<LikeablePerson> unlike(Member member, String id) {
+    public RsData<LikeablePerson> unlike(Member member, int id) {
         // 비정상적인 접근 차단
         if (member.hasConnectedInstaMember() == false) {
             return RsData.of("F-2", "먼저 본인의 인스타그램 아이디를 입력해야 합니다.");
         }
 
-
-        Optional<LikeablePerson> opLikeablePerson = likeablePersonRepository.findById(Integer.parseInt(id));
+        Optional<LikeablePerson> opLikeablePerson = findById(id);
 
         // 이미 삭제된 호감 상대일 경우
         if (!opLikeablePerson.isPresent()) {
