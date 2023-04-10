@@ -168,4 +168,23 @@ public class LikeablePersonControllerTests {
                 .andExpect(status().is3xxRedirection());
     }
 
+    @Test
+    @DisplayName("호감 삭제 (존재하지 않는 호감 상태 삭제 -> 오류)")
+    @WithUserDetails("user3")
+    void t007() throws Exception {
+        // When
+        ResultActions resultActions = mvc
+                .perform(
+                        delete("/likeablePerson/100")
+                                .with(csrf())
+                )
+                .andDo(print());
+
+        // Then
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("delete"))
+                .andExpect(status().is4xxClientError());
+    }
+
 }
