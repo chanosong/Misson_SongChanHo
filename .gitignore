@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Key values ###
+src/main/resources/application-config.yml
