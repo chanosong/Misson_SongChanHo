@@ -9,7 +9,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +59,8 @@ public class LikeablePersonController {
         return "usr/likeablePerson/list";
     }
 
-    @PostMapping("/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}")
     public String delete(@PathVariable int id) {
         RsData<LikeablePerson> deleteRsData = likeablePersonService.unlike(rq.getMember(), id);
 
