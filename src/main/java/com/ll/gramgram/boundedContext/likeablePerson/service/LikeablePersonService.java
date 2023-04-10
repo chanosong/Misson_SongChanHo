@@ -48,7 +48,7 @@ public class LikeablePersonService {
 
     // 호감상대 취소
     @Transactional
-    public RsData<LikeablePerson> unlike(Member member, int id) {
+    public RsData<LikeablePerson> unlike(Member member, Long id) {
         // 비정상적인 접근 차단
         if (member.hasConnectedInstaMember() == false) {
             return RsData.of("F-2", "먼저 본인의 인스타그램 아이디를 입력해야 합니다.");
@@ -72,7 +72,7 @@ public class LikeablePersonService {
         return likeablePersonRepository.findByFromInstaMemberId(fromInstaMemberId);
     }
 
-    public Optional<LikeablePerson> findById(int id) {
+    public Optional<LikeablePerson> findById(Long id) {
         return likeablePersonRepository.findById(id);
     }
 }
