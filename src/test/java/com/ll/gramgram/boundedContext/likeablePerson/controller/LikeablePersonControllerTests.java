@@ -212,4 +212,25 @@ public class LikeablePersonControllerTests {
 
         assertThat(likeablePersonService.findById(1L).isPresent()).isEqualTo(true);
     }
+
+    @Test
+    @DisplayName("중복 호감등록 (user3 -> user4)")
+    @WithUserDetails("user3")
+    void t009() throws Exception {
+        // When
+        ResultActions resultActions = mvc
+                .perform(
+                        post("/likeablePerson/add")
+                                .with(csrf())
+                                .param("username", "insta_user4")
+                                .param("attractiveCodeType", "2")
+                )
+                .andDo(print());
+
+        // Then
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("add"))
+                .andExpect(status().is4xxClientError());
+    }
 }
