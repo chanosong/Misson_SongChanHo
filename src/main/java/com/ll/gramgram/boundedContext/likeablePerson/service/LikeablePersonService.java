@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -59,6 +60,11 @@ public class LikeablePersonService {
         // 이미 삭제된 호감 상대일 경우
         if (!opLikeablePerson.isPresent()) {
             return RsData.of("F-3", "이미 삭제된 호감상대입니다.");
+        }
+
+        // 권한 체킹
+        if (!Objects.equals(member.getInstaMember().getId(), opLikeablePerson.get().getFromInstaMember().getId())) {
+            return RsData.of("F-4", "권한이 없습니다.");
         }
 
         // 삭제 가능한 상태인 경우 삭제
