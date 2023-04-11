@@ -1,5 +1,6 @@
 package com.ll.gramgram.boundedContext.home.controller;
 
+import com.ll.gramgram.base.rq.Rq;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,9 @@ import java.util.Enumeration;
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
+
+    private final Rq rq;
+
     @GetMapping("/")
     public String showMain() {
         return "usr/home/main";
@@ -29,5 +33,10 @@ public class HomeController {
         }
 
         return sb.toString().replaceAll("\n", "<br>");
+    }
+
+    @GetMapping("/historyBackTest")
+    public String showHistoryBackTest(HttpSession httpSession) {
+        return rq.historyBack("접근 권한이 없습니다.");
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -31,10 +32,11 @@ public class LikeablePersonService {
         }
 
         InstaMember toInstaMember = instaMemberService.findByUsernameOrCreate(username).getData();
+        InstaMember fromInstaMember = member.getInstaMember();
 
         LikeablePerson likeablePerson = LikeablePerson
                 .builder()
-                .fromInstaMember(member.getInstaMember()) // 호감을 표시하는 사람의 인스타 멤버
+                .fromInstaMember(fromInstaMember) // 호감을 표시하는 사람의 인스타 멤버
                 .fromInstaMemberUsername(member.getInstaMember().getUsername()) // 중요하지 않음
                 .toInstaMember(toInstaMember) // 호감을 받는 사람의 인스타 멤버
                 .toInstaMemberUsername(toInstaMember.getUsername()) // 중요하지 않음
@@ -43,12 +45,16 @@ public class LikeablePersonService {
 
         likeablePersonRepository.save(likeablePerson); // 저장
 
+        // 양방향 호감표시 적용
+        fromInstaMember.addFromLikeablePerson(likeablePerson);
+        toInstaMember.addToLikeablePerson(likeablePerson);
+
         return RsData.of("S-1", "입력하신 인스타유저(%s)를 호감상대로 등록되었습니다.".formatted(username), likeablePerson);
     }
 
     // 호감상대 취소
     @Transactional
-    public RsData<LikeablePerson> unlike(Member member, int id) {
+    public RsData<LikeablePerson> unlike(Member member, Long id) {
         // 비정상적인 접근 차단
         if (member.hasConnectedInstaMember() == false) {
             return RsData.of("F-2", "먼저 본인의 인스타그램 아이디를 입력해야 합니다.");
@@ -59,6 +65,11 @@ public class LikeablePersonService {
         // 이미 삭제된 호감 상대일 경우
         if (!opLikeablePerson.isPresent()) {
             return RsData.of("F-3", "이미 삭제된 호감상대입니다.");
+        }
+
+        // 권한 체킹
+        if (!Objects.equals(member.getInstaMember().getId(), opLikeablePerson.get().getFromInstaMember().getId())) {
+            return RsData.of("F-4", "권한이 없습니다.");
         }
 
         // 삭제 가능한 상태인 경우 삭제
@@ -72,7 +83,7 @@ public class LikeablePersonService {
         return likeablePersonRepository.findByFromInstaMemberId(fromInstaMemberId);
     }
 
-    public Optional<LikeablePerson> findById(int id) {
+    public Optional<LikeablePerson> findById(Long id) {
         return likeablePersonRepository.findById(id);
     }
 }
