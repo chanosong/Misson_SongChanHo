@@ -32,10 +32,11 @@ public class LikeablePersonService {
         }
 
         InstaMember toInstaMember = instaMemberService.findByUsernameOrCreate(username).getData();
+        InstaMember fromInstaMember = member.getInstaMember();
 
         LikeablePerson likeablePerson = LikeablePerson
                 .builder()
-                .fromInstaMember(member.getInstaMember()) // 호감을 표시하는 사람의 인스타 멤버
+                .fromInstaMember(fromInstaMember) // 호감을 표시하는 사람의 인스타 멤버
                 .fromInstaMemberUsername(member.getInstaMember().getUsername()) // 중요하지 않음
                 .toInstaMember(toInstaMember) // 호감을 받는 사람의 인스타 멤버
                 .toInstaMemberUsername(toInstaMember.getUsername()) // 중요하지 않음
@@ -43,6 +44,10 @@ public class LikeablePersonService {
                 .build();
 
         likeablePersonRepository.save(likeablePerson); // 저장
+
+        // 양방향 호감표시 적용
+        fromInstaMember.addFromLikeablePerson(likeablePerson);
+        toInstaMember.addToLikeablePerson(likeablePerson);
 
         return RsData.of("S-1", "입력하신 인스타유저(%s)를 호감상대로 등록되었습니다.".formatted(username), likeablePerson);
     }

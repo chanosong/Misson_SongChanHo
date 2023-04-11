@@ -40,4 +40,18 @@ public class InstaMember {
     @LazyCollection(LazyCollectionOption.EXTRA)
     @Builder.Default
     private List<LikeablePerson> fromLikeablePeople = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toInstaMember", cascade= {CascadeType.ALL})
+    @OrderBy("id desc")
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    @Builder.Default
+    private List<LikeablePerson> toLikeablePeople = new ArrayList<>();
+
+    public void addFromLikeablePerson(LikeablePerson likeablePerson) {
+        fromLikeablePeople.add(0, likeablePerson);
+    }
+
+    public void addToLikeablePerson(LikeablePerson likeablePerson) {
+        toLikeablePeople.add(0, likeablePerson);
+    }
 }
