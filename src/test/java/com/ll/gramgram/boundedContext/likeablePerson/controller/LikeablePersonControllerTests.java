@@ -12,6 +12,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.hamcrest.Matchers.containsString;
@@ -231,5 +235,40 @@ public class LikeablePersonControllerTests {
                 .andExpect(handler().handlerType(LikeablePersonController.class))
                 .andExpect(handler().methodName("add"))
                 .andExpect(status().is4xxClientError());
+    }
+
+
+    @Test
+    @DisplayName("호감등록 10회 초과 오류 확인 (user2 -> user01 ~ user11")
+    @WithUserDetails("user2")
+    void t010() throws Exception {
+        ResultActions resultActions;
+        // 11회 진행
+        for (int i = 0; i < 11; i++) {
+            // When
+            resultActions = mvc
+                    .perform(post("/likeablePerson/add")
+                            .with(csrf()) // CSRF 키 생성
+                            .param("username", "insta_user0" + i)
+                            .param("attractiveTypeCode", "" + i % 3)
+                    )
+                    .andDo(print());
+            // Then
+            // 1 ~ 10 회까지는
+            if (i != 10) {
+                resultActions
+                        .andExpect(handler().handlerType(LikeablePersonController.class))
+                        .andExpect(handler().methodName("add"))
+                        .andExpect(status().is3xxRedirection());
+            }
+            // 11회인 경우 오류
+            else {
+                resultActions
+                        .andExpect(handler().handlerType(LikeablePersonController.class))
+                        .andExpect(handler().methodName("add"))
+                        .andExpect(status().is4xxClientError());
+            }
+
+        }
     }
 }
