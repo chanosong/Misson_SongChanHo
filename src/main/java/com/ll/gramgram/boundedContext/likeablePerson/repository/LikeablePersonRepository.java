@@ -10,4 +10,7 @@ public interface LikeablePersonRepository extends JpaRepository<LikeablePerson, 
 
     // from~ 과 to~ 의 관계 반환
     List<LikeablePerson> findByFromInstaMemberIdAndToInstaMemberId(Long fromInstaMemberId, Long toInstaMemberId);
+
+    // fromInstaMemberId 기준으로 보낸 호감표시 개수 반환
+    Long countByFromInstaMemberId(Long fromInstaMemberId);
 }
