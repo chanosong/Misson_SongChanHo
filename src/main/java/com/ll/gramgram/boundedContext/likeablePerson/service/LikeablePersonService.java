@@ -42,7 +42,7 @@ public class LikeablePersonService {
         }
 
         // 10명 초과로 호감표시 예외처리
-        if (this.countLikeablePersonByFromInstaMemberId(fromInstaMember.getId()) > 10) {
+        if (this.findByFromInstaMemberId(fromInstaMember.getId()).size() >= 10) {
             return RsData.of("F-4", "이미 10명의 좋은 인연으로 가득찼습니다.");
         }
 
@@ -106,10 +106,5 @@ public class LikeablePersonService {
 
         if (likeablePersonList.isEmpty()) return false;
         return true;
-    }
-
-    // 해당 fromInstaMemberId로 등록되어있는 호감표시의 개수
-    public Long countLikeablePersonByFromInstaMemberId(Long fromInstaMemberId) {
-        return likeablePersonRepository.countByFromInstaMemberId(fromInstaMemberId);
     }
 }
