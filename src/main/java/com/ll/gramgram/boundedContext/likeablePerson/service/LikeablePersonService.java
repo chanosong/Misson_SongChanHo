@@ -1,5 +1,6 @@
 package com.ll.gramgram.boundedContext.likeablePerson.service;
 
+import com.ll.gramgram.base.rq.Rq;
 import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
 import com.ll.gramgram.boundedContext.instaMember.service.InstaMemberService;
@@ -21,6 +22,7 @@ public class LikeablePersonService {
     private final LikeablePersonRepository likeablePersonRepository;
     private final InstaMemberService instaMemberService;
 
+    private final Rq rq;
     @Transactional
     public RsData<LikeablePerson> like(Member member, String username, int attractiveTypeCode) {
         if ( member.hasConnectedInstaMember() == false ) {
@@ -33,6 +35,11 @@ public class LikeablePersonService {
 
         InstaMember toInstaMember = instaMemberService.findByUsernameOrCreate(username).getData();
         InstaMember fromInstaMember = member.getInstaMember();
+
+        // 동일 인물 호감표시 예외처리
+        if (this.isAlreadyLikeable(fromInstaMember, toInstaMember)) {
+            return RsData.of("F-3", "해당 사용자에게 이미 호감표시를 하였습니다.");
+        }
 
         LikeablePerson likeablePerson = LikeablePerson
                 .builder()
@@ -85,5 +92,14 @@ public class LikeablePersonService {
 
     public Optional<LikeablePerson> findById(Long id) {
         return likeablePersonRepository.findById(id);
+    }
+
+    // 해당 관계가 이미 적용되어있는지 확인
+    public boolean isAlreadyLikeable(InstaMember fromInstaMember, InstaMember toInstaMember) {
+        List<LikeablePerson> likeablePersonList = likeablePersonRepository
+                .findByFromInstaMemberIdAndToInstaMemberId(fromInstaMember.getId(), toInstaMember.getId());
+
+        if (likeablePersonList.isEmpty()) return false;
+        return true;
     }
 }
