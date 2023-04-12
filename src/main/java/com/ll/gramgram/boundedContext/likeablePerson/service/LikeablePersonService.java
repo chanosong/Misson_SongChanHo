@@ -4,6 +4,7 @@ import com.ll.gramgram.base.rq.Rq;
 import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
 import com.ll.gramgram.boundedContext.instaMember.service.InstaMemberService;
+import com.ll.gramgram.boundedContext.likeablePerson.entity.AttractiveTypeCode;
 import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.likeablePerson.repository.LikeablePersonRepository;
 import com.ll.gramgram.boundedContext.member.entity.Member;
@@ -21,26 +22,6 @@ import java.util.Optional;
 public class LikeablePersonService {
     private final LikeablePersonRepository likeablePersonRepository;
     private final InstaMemberService instaMemberService;
-
-    private enum AttractiveTypeCode {
-
-        OUTLOOK(1, "외모"), PERSONALITY(3,"성격"), ABILITY(2,"능력");
-
-        private final int value;
-        private final String symbol;
-        AttractiveTypeCode(int value, String symbol) {
-            this.value = value;
-            this.symbol = symbol;
-        }
-
-        public static final AttractiveTypeCode[] ATTRACTIVE_TYPE_CODES = AttractiveTypeCode.values();
-        public int getValue() {return value;}
-        public String getSymbol() {return symbol;}
-
-        public static String of(int code) {
-            if (code < 1 || code > 3) {throw new IllegalArgumentException("Invalid AttractiveTypeCode : " + code);}
-            return ATTRACTIVE_TYPE_CODES[code - 1].symbol;
-    }};
 
     @Transactional
     public RsData<LikeablePerson> like(Member member, String username, int attractiveTypeCode) {
