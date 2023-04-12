@@ -271,4 +271,31 @@ public class LikeablePersonControllerTests {
 
         }
     }
+
+    @Test
+    @DisplayName("user3 -> user4의 attrativeTypeCode 3 -> 2 -> 1 테스팅")
+    @WithUserDetails("user3")
+    void t011() throws Exception {
+        ResultActions resultActions;
+
+        // 기존의 코드 1에서 1 -> 3 -> 2 -> 1 순으로 변경
+        for (int i = 3; i > 0; i--) {
+            // When
+            resultActions = mvc
+                    .perform(
+                            post("/likeablePerson/add")
+                                    .with(csrf())
+                                    .param("username","insta_user4")
+                                    .param("attractiveTypeCode", "" + i)
+                    )
+                    .andDo(print());
+
+            // Then
+            resultActions
+                    .andExpect(handler().handlerType(LikeablePersonController.class))
+                    .andExpect(handler().methodName("add"))
+                    .andExpect(status().is3xxRedirection());
+        }
+
+    }
 }
