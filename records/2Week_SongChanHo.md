@@ -60,4 +60,5 @@
 
   **[Refactoring]**
 
-    ## 진행 중
+    - ArrtractiveTypeCode 순서 변경
+    - like 메소드 내의 중복 호감등록인 경우 처리하는 것을 따로 handleDuplicateLikeablePerson으로 분리
