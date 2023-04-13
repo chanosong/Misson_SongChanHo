@@ -44,19 +44,7 @@ public class LikeablePersonService {
 
         // 동일 인물 호감표시 예외처리
         if (opLikeablePerson.isPresent()) {
-            // 기존 호감 타입 코드
-            int beforeTypeCode = opLikeablePerson.get().getAttractiveTypeCode();
-
-            // 만일 현재 입력한 코드와 다른 경우
-            if (beforeTypeCode != attractiveTypeCode) {
-                opLikeablePerson.get().setAttractiveTypeCode(attractiveTypeCode);
-
-                return RsData.of("S-2", "%s에 대한 호감사유를 %s에서 %s으로 변경합니다."
-                        .formatted(username, AttractiveTypeCode.of(beforeTypeCode),AttractiveTypeCode.of(attractiveTypeCode)), opLikeablePerson.get());
-            }
-
-            // 현재 입력한 코드와 같은 경우 반려
-            return RsData.of("F-3", "해당 사용자에게 이미 호감표시를 하였습니다.");
+            return handleDuplicateLikeablePerson(opLikeablePerson.get(), username, attractiveTypeCode);
         }
 
         // 10명 초과로 호감표시 예외처리
@@ -121,5 +109,22 @@ public class LikeablePersonService {
     public Optional<LikeablePerson> findByfromIdAndToId(InstaMember fromInstaMember, InstaMember toInstaMember) {
         return likeablePersonRepository
                 .findByFromInstaMemberIdAndToInstaMemberId(fromInstaMember.getId(), toInstaMember.getId());
+    }
+
+    // 중복인 경우 호감 타입 코드 비교하여 처리
+    public RsData<LikeablePerson> handleDuplicateLikeablePerson(LikeablePerson likeablePerson, String username, int attractiveTypeCode) {
+        // 기존 호감 타입 코드
+        int beforeTypeCode = likeablePerson.getAttractiveTypeCode();
+
+        // 만일 현재 입력한 코드와 다른 경우
+        if (beforeTypeCode != attractiveTypeCode) {
+            likeablePerson.setAttractiveTypeCode(attractiveTypeCode);
+
+            return RsData.of("S-2", "%s에 대한 호감사유를 %s에서 %s으로 변경합니다."
+                    .formatted(username, AttractiveTypeCode.of(beforeTypeCode),AttractiveTypeCode.of(attractiveTypeCode)), likeablePerson);
+        }
+
+        // 현재 입력한 코드와 같은 경우 반려
+        return RsData.of("F-3", "해당 사용자에게 이미 호감표시를 하였습니다.");
     }
 }
