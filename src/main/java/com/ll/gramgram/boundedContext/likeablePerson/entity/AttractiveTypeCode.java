@@ -1,7 +1,7 @@
 package com.ll.gramgram.boundedContext.likeablePerson.entity;
 
 public enum AttractiveTypeCode {
-    OUTLOOK(1, "외모"), PERSONALITY(3,"성격"), ABILITY(2,"능력");
+    OUTLOOK(1, "외모"), PERSONALITY(2,"성격"), ABILITY(3,"능력");
 
     private final int value;
     private final String symbol;
