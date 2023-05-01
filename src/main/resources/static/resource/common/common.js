@@ -43,3 +43,8 @@ function toastWarning(msg) {
         toastr["warning"](pureMsg, "경고");
     }
 }
+
+// 어떠한 기능을 살짝 늦게 동작
+function setTimeoutZero(callback) {
+    setTimeout(callback);
+}
