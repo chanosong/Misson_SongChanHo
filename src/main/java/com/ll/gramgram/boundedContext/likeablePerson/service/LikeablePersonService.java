@@ -153,6 +153,36 @@ public class LikeablePersonService {
         return RsData.of("S-1", "호감사유를 수정하였습니다.");
     }
 
+    private RsData<LikeablePerson> modifyAttractive(Member actor, LikeablePerson likeablePerson, int attractiveTypeCode) {
+        RsData canModifyRsData = canModifyLike(actor, likeablePerson);
+
+        if (canModifyRsData.isFail()) return canModifyRsData;
+
+        String oldAttractiveTypeDisplayName = likeablePerson.getAttractiveTypeDisplayName();
+        String username = likeablePerson.getToInstaMember().getUsername();
+
+        modifyAttractiveTypeCode(likeablePerson, attractiveTypeCode);
+
+        String newAttractiveTypeDisplayName = likeablePerson.getAttractiveTypeDisplayName();
+
+        return RsData.of("S-3", "%s님에 대한 호감사유를 %s에서 %s(으)로 변경합니다.".formatted(username, oldAttractiveTypeDisplayName));
+    }
+
+    private RsData<LikeablePerson> modifyAttractive(Member actor, String username, int attractiveTypeCode) {
+        // actor가 생성한 좋아요 가져오기
+        List<LikeablePerson> formLikeablePeople = actor.getInstaMember().getFromLikeablePeople();
+
+        LikeablePerson fromLikeablePerson = formLikeablePeople
+                .stream()
+                .filter(e -> e.getToInstaMember().getUsername().equals(username))
+                .findFirst()
+                .orElse(null);
+
+        if (fromLikeablePerson == null) return RsData.of("F-7", "호감표시를 하지 않았습니다.");
+
+        return modifyAttractive(actor, fromLikeablePerson, attractiveTypeCode);
+    }
+
     private void modifyAttractiveTypeCode(LikeablePerson likeablePerson, int attractiveTypeCode) {
         int oldAttractiveTypeCode = likeablePerson.getAttractiveTypeCode();
 
