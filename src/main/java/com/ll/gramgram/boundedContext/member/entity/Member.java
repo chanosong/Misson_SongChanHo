@@ -59,6 +59,6 @@ public class Member {
     }
 
     public String getNickname() {
-        return "%04d".formatted(getId());
+        return "%1$4s".formatted(Long.toString(getId(), 36)).replace(' ', '0');
     }
 }
