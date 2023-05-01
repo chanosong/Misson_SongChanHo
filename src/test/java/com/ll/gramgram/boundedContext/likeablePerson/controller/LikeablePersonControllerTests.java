@@ -160,7 +160,7 @@ public class LikeablePersonControllerTests {
     }
 
     @Test
-    @DisplayName("호감상대 삭제 (user3이 user4에게 보낸 호감 삭제)")
+    @DisplayName("호감 취소 (user3이 user4에게 보낸 호감 취소)")
     @WithUserDetails("user3")
     void t006() throws Exception {
         // WHEN
@@ -173,12 +173,12 @@ public class LikeablePersonControllerTests {
         // THEN
         resultActions
                 .andExpect(handler().handlerType(LikeablePersonController.class))
-                .andExpect(handler().methodName("delete"))
+                .andExpect(handler().methodName("cancel"))
                 .andExpect(status().is3xxRedirection());
     }
 
     @Test
-    @DisplayName("호감 삭제 (존재하지 않는 호감 상태 삭제 -> 오류)")
+    @DisplayName("호감 취소 (존재하지 않는 호감 상태 취소 -> 오류)")
     @WithUserDetails("user3")
     void t007() throws Exception {
         // When
@@ -192,12 +192,12 @@ public class LikeablePersonControllerTests {
         // Then
         resultActions
                 .andExpect(handler().handlerType(LikeablePersonController.class))
-                .andExpect(handler().methodName("delete"))
+                .andExpect(handler().methodName("cancel"))
                 .andExpect(status().is4xxClientError());
     }
 
     @Test
-    @DisplayName("호감삭제 (권한 없음 -> 오류)")
+    @DisplayName("호감 취소 (권한 없음 -> 오류)")
     @WithUserDetails("user2")
     void t008() throws Exception {
         // When
@@ -210,7 +210,7 @@ public class LikeablePersonControllerTests {
 
         // Then
         resultActions.andExpect(handler().handlerType(LikeablePersonController.class))
-                .andExpect(handler().methodName("delete"))
+                .andExpect(handler().methodName("cancel"))
                 .andExpect(status().is4xxClientError());
 
         assertThat(likeablePersonService.findById(1L).isPresent()).isEqualTo(true);
