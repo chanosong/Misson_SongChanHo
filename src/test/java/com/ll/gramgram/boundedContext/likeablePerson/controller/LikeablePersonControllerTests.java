@@ -243,8 +243,8 @@ public class LikeablePersonControllerTests {
     @WithUserDetails("user2")
     void t010() throws Exception {
         ResultActions resultActions;
-        // 11회 진행
-        for (int i = 0; i < 11; i++) {
+        // 10회 진행 (이미 호감 1회 존재)
+        for (int i = 0; i < 10; i++) {
             // When
             resultActions = mvc
                     .perform(post("/usr/likeablePerson/like")
@@ -254,8 +254,8 @@ public class LikeablePersonControllerTests {
                     )
                     .andDo(print());
             // Then
-            // 1 ~ 10 회까지는
-            if (i != 10) {
+            // 1 ~ 9 회까지는
+            if (i != 9) {
                 resultActions
                         .andExpect(handler().handlerType(LikeablePersonController.class))
                         .andExpect(handler().methodName("like"))
