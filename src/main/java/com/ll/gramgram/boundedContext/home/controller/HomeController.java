@@ -21,7 +21,7 @@ public class HomeController {
         return "usr/home/main";
     }
 
-    @GetMapping("/debugSession")
+    @GetMapping("/usr/debugSession")
     @ResponseBody
     @PreAuthorize("hasAuthority('admin')")
     public String showDebugSession(HttpSession session) {
@@ -37,7 +37,7 @@ public class HomeController {
         return sb.toString().replaceAll("\n", "<br>");
     }
 
-    @GetMapping("/historyBackTest")
+    @GetMapping("/usr/historyBackTest")
     @PreAuthorize("hasAuthority('admin')")
     public String showHistoryBackTest(HttpSession httpSession) {
         return rq.historyBack("접근 권한이 없습니다.");
