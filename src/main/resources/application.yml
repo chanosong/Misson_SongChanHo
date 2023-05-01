@@ -69,3 +69,4 @@ logging:
 likeablePerson:
   from:
     max: 10
+  modifyCoolTime: '#{60 * 60 * 3}'
