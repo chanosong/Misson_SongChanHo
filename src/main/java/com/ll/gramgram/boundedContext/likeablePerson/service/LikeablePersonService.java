@@ -67,12 +67,16 @@ public class LikeablePersonService {
         fromInstaMember.addFromLikeablePerson(likeablePerson);
         toInstaMember.addToLikeablePerson(likeablePerson);
 
+        // 호감표시 횟수 증가
+        toInstaMember.increaseLikesCount(fromInstaMember.getGender(), attractiveTypeCode);
+
         return RsData.of("S-1", "입력하신 인스타유저(%s)를 호감상대로 등록되었습니다.".formatted(username), likeablePerson);
     }
 
     // 호감상대 취소
     @Transactional
     public RsData<LikeablePerson> unlike(Member member, Long id) {
+
         // 비정상적인 접근 차단
         if (member.hasConnectedInstaMember() == false) {
             return RsData.of("F-2", "먼저 본인의 인스타그램 아이디를 입력해야 합니다.");
@@ -92,6 +96,9 @@ public class LikeablePersonService {
 
         // 삭제 가능한 상태인 경우 삭제
         LikeablePerson likeablePerson = opLikeablePerson.get();
+
+        likeablePerson.getToInstaMember().decreaseLikesCount(likeablePerson.getFromInstaMember().getGender(), likeablePerson.getAttractiveTypeCode());
+
         likeablePersonRepository.delete(likeablePerson);
 
         return RsData.of("S-2", "해당 인스타유저(%s)를 호감상대에서 삭제하였습니다.".formatted(likeablePerson.getToInstaMemberUsername()));
