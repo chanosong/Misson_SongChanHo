@@ -125,7 +125,7 @@ public class LikeablePersonService {
 
         // 만일 현재 입력한 코드와 다른 경우
         if (beforeTypeCode != attractiveTypeCode) {
-            likeablePerson.setAttractiveTypeCode(attractiveTypeCode);
+            likeablePerson.updateAttractionTypeCode(attractiveTypeCode);
 
             return RsData.of("S-2", "%s에 대한 호감사유를 %s에서 %s으로 변경합니다."
                     .formatted(username, AttractiveTypeCode.of(beforeTypeCode),AttractiveTypeCode.of(attractiveTypeCode)), likeablePerson);
@@ -143,7 +143,7 @@ public class LikeablePersonService {
 
         if (canModifyRsData.isFail()) return canModifyRsData;
 
-        likeablePerson.setAttractiveTypeCode(attractiveTypeCode);
+        likeablePerson.updateAttractionTypeCode(attractiveTypeCode);
 
         return RsData.of("S-1", "호감사유를 수정하였습니다.");
     }
