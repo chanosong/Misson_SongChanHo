@@ -155,7 +155,8 @@ public class LikeablePersonService {
         return RsData.of("S-1", "호감사유를 수정하였습니다.");
     }
 
-    private RsData<LikeablePerson> modifyAttractive(Member actor, LikeablePerson likeablePerson, int attractiveTypeCode) {
+    @Transactional
+    public RsData<LikeablePerson> modifyAttractive(Member actor, LikeablePerson likeablePerson, int attractiveTypeCode) {
         RsData canModifyRsData = canModifyLike(actor, likeablePerson);
 
         if (canModifyRsData.isFail()) return canModifyRsData;
@@ -167,7 +168,7 @@ public class LikeablePersonService {
 
         String newAttractiveTypeDisplayName = likeablePerson.getAttractiveTypeDisplayName();
 
-        return RsData.of("S-3", "%s님에 대한 호감사유를 %s에서 %s(으)로 변경합니다.".formatted(username, oldAttractiveTypeDisplayName));
+        return RsData.of("S-3", "%s님에 대한 호감사유를 %s에서 %s(으)로 변경합니다.".formatted(username, oldAttractiveTypeDisplayName, newAttractiveTypeDisplayName), likeablePerson);
     }
 
     private RsData<LikeablePerson> modifyAttractive(Member actor, String username, int attractiveTypeCode) {
