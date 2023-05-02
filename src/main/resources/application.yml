@@ -1,3 +1,10 @@
+server:
+  port: 443
+  ssl:
+    enabled: true
+    key-store-type: PKCS12
+    key-store-password: 123456
+    key-store: keystore.p12
 spring:
   mvc:
     hiddenmethod:
@@ -32,6 +39,11 @@ spring:
             scope:
               - email
               - profile
+          facebook:
+            clientId: ${facebook-client-id}
+            client-secret: ${facebook-client-secret}
+            client-name: Facebook
+            redirect-uri: https://localhost:8080/login/oauth2/code/facebook
           naver:
             clientId: ${naver-client-id}
             client-secret: ${naver-client-secret}
