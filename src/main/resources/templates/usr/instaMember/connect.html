@@ -40,7 +40,7 @@
     <div class="max-w-2xl w-full px-4">
         <h1 class="mb-4">
             <i class="fa-brands fa-instagram"></i>
-            인스타아이디 인력
+            인스타아이디 입력
         </h1>
 
         <form class="flex flex-col gap-6" method="POST" th:action onsubmit="ConnectForm__submit(this); return false;">
@@ -96,8 +96,16 @@
             </div>
             <button id="btn-insta-member-connect-1" class="btn btn-block btn-primary gap-1">
                 <i class="fa-brands fa-instagram"></i>
-                <span>인스타 아이디 인증</span>
+                <span>인스타 아이디 입력</span>
             </button>
+        </form>
+
+        <div class="mt-4">
+            <a href="/oauth2/authorization/instagram" class="btn btn-block btn-outline gap-1">
+                <i class="fa-brands fa-instagram text-[color:#E1306C]"></i>
+                <span>인스타 아이디 연결</span>
+            </a>
+        </div>
         </form>
     </div>
 </main>
