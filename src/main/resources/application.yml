@@ -49,7 +49,7 @@ spring:
             clientId: ${instagram-client-id}
             client-secret: ${instagram-client-secret}
             client-name: Instagram
-            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
             scope:
               - user_profile
               - user_media
