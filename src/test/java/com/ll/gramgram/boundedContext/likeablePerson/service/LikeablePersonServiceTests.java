@@ -1,6 +1,7 @@
 package com.ll.gramgram.boundedContext.likeablePerson.service;
 
 import com.ll.gramgram.base.baseEntity.appConfig.AppConfig;
+import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.likeablePerson.repository.LikeablePersonRepository;
 import com.ll.gramgram.boundedContext.member.entity.Member;
@@ -73,6 +74,40 @@ public class LikeablePersonServiceTests {
         // 갱신 되었는지 확인
         assertThat(
                 likeablePersonToBts.getModifyUnlockDate().isAfter(coolTime)
+        ).isTrue();
+    }
+
+    @Test
+    @DisplayName("쿨타임이 다 지나지 않은 경우 호감표시를 통해 사유 변경 불가")
+    void t004() throws Exception {
+
+        Member memberUser3 = memberService.findByUsername("user3").orElseThrow();
+        // 호감표시 생성
+        likeablePersonService.like(memberUser3, "bts", 3).getData();
+
+        // 다시 한번 호감표시를 다른 사유로 생성한다.
+        RsData<LikeablePerson> likeablePersonRsData = likeablePersonService.like(memberUser3, "bts", 1);
+
+        // 실패했는지 확인
+        assertThat(
+                likeablePersonRsData.isFail()
+        ).isTrue();
+    }
+
+    @Test
+    @DisplayName("쿨타임이 다 지나지 않은 경우 호감사유변경에서 사유 변경 불가")
+    void t005() throws Exception {
+        
+        Member memberUser3 = memberService.findByUsername("user3").orElseThrow();
+        // 호감표시 생성
+        LikeablePerson likeablePersonToBts = likeablePersonService.like(memberUser3, "bts", 3).getData();
+
+        // 호감사유 변경 시도
+        RsData<LikeablePerson> likeablePersonRsData = likeablePersonService.modifyLike(memberUser3, likeablePersonToBts.getId(), 1);
+
+        // 갱신 실패 확인
+        assertThat(
+                likeablePersonRsData.isFail()
         ).isTrue();
     }
 }
