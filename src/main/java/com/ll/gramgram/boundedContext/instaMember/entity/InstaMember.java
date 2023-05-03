@@ -3,6 +3,7 @@ package com.ll.gramgram.boundedContext.instaMember.entity;
 import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,25 +16,22 @@ import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-@ToString
 @Entity
 @Getter
-public class InstaMember {
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
-    @CreatedDate
-    private LocalDateTime createDate;
-    @LastModifiedDate
-    private LocalDateTime modifyDate;
+@NoArgsConstructor
+@SuperBuilder
+@ToString(callSuper = true)
+public class InstaMember extends InstaMemberBase {
+    @Setter
     @Column(unique = true)
     private String username;
+
     @Setter
-    private String gender;
+    @Column(unique = true)
+    private String oauthId;
+
+    @Setter
+    private String accessToken;
 
     @OneToMany(mappedBy = "fromInstaMember", cascade= {CascadeType.ALL})
     @OrderBy("id desc")
@@ -53,5 +51,57 @@ public class InstaMember {
 
     public void addToLikeablePerson(LikeablePerson likeablePerson) {
         toLikeablePeople.add(0, likeablePerson);
+    }
+
+    public String getGenderDisplayName() {
+        return switch (gender) {
+            case "W" -> "여성";
+            default -> "남성";
+        };
+    }
+
+    public String getGenderDisplayNameWithIcon() {
+        return switch (gender) {
+            case "W" -> "<i class=\"fa-solid fa-person-dress\"></i>";
+            default -> "<i class=\"fa-solid fa-person\"></i>";
+        } + "&nbsp;" + getGenderDisplayName();
+    }
+
+    public void increaseLikesCount(String gender, int attractiveTypeCode) {
+        if (gender.equals("W") && attractiveTypeCode == 1) likesCountByGenderWomanAndAttractiveTypeCode1++;
+        if (gender.equals("W") && attractiveTypeCode == 2) likesCountByGenderWomanAndAttractiveTypeCode2++;
+        if (gender.equals("W") && attractiveTypeCode == 3) likesCountByGenderWomanAndAttractiveTypeCode3++;
+        if (gender.equals("M") && attractiveTypeCode == 1) likesCountByGenderManAndAttractiveTypeCode1++;
+        if (gender.equals("M") && attractiveTypeCode == 2) likesCountByGenderManAndAttractiveTypeCode2++;
+        if (gender.equals("M") && attractiveTypeCode == 3) likesCountByGenderManAndAttractiveTypeCode3++;
+    }
+
+    public void decreaseLikesCount(String gender, int attractiveTypeCode) {
+        if (gender.equals("W") && attractiveTypeCode == 1) likesCountByGenderWomanAndAttractiveTypeCode1--;
+        if (gender.equals("W") && attractiveTypeCode == 2) likesCountByGenderWomanAndAttractiveTypeCode2--;
+        if (gender.equals("W") && attractiveTypeCode == 3) likesCountByGenderWomanAndAttractiveTypeCode3--;
+        if (gender.equals("M") && attractiveTypeCode == 1) likesCountByGenderManAndAttractiveTypeCode1--;
+        if (gender.equals("M") && attractiveTypeCode == 2) likesCountByGenderManAndAttractiveTypeCode2--;
+        if (gender.equals("M") && attractiveTypeCode == 3) likesCountByGenderManAndAttractiveTypeCode3--;
+    }
+
+    public void updateGender(String gender) {
+        this.gender = gender;
+    }
+
+    public InstaMemberSnapshot snapshot(String eventTypeCode) {
+        return InstaMemberSnapshot
+                .builder()
+                .eventTypeCode(eventTypeCode)
+                .username(username)
+                .instaMember(this)
+                .gender(gender)
+                .likesCountByGenderWomanAndAttractiveTypeCode1(likesCountByGenderWomanAndAttractiveTypeCode1)
+                .likesCountByGenderWomanAndAttractiveTypeCode2(likesCountByGenderWomanAndAttractiveTypeCode2)
+                .likesCountByGenderWomanAndAttractiveTypeCode3(likesCountByGenderWomanAndAttractiveTypeCode3)
+                .likesCountByGenderManAndAttractiveTypeCode1(likesCountByGenderManAndAttractiveTypeCode1)
+                .likesCountByGenderManAndAttractiveTypeCode2(likesCountByGenderManAndAttractiveTypeCode2)
+                .likesCountByGenderManAndAttractiveTypeCode3(likesCountByGenderManAndAttractiveTypeCode3)
+                .build();
     }
 }
