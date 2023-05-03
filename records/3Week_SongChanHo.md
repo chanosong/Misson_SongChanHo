@@ -17,7 +17,7 @@
     - [x] 호감표시/사유변경 시 Event 생성
     - [x] 이벤트를 처리할 EventListener 생성
     - [x] EventListener에서 notification 생성 후 DB에 저장 (readDate = null)
-    - [ ] notification/list에서 자신에게 온 모든 알림 표시
+    - [x] notification/list에서 자신에게 온 모든 알림 표시
     - [ ] 알림을 읽은 경우 readDate 업데이트
     - [ ] notification/list에서 자신에게 온 알림 중 이미 읽은 것을 제외하고 표시
     - [ ] 테스트 코드 작성
