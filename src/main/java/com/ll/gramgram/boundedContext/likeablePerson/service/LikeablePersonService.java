@@ -127,6 +127,10 @@ public class LikeablePersonService {
 
     // 중복인 경우 호감 타입 코드 비교하여 처리
     public RsData<LikeablePerson> handleDuplicateLikeablePerson(LikeablePerson likeablePerson, String username, int attractiveTypeCode) {
+
+        // 쿨타임 확인 후 지나지 않은 경우 reject
+        if (!likeablePerson.isModifyUnlocked()) return RsData.of("F-4", "호감사유 변경 가능 시간이 %s 남았습니다".formatted(likeablePerson.getModifyUnlockDateRemainStrHuman()));
+
         // 기존 호감 타입 코드
         int beforeTypeCode = likeablePerson.getAttractiveTypeCode();
 
