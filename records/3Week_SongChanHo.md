@@ -14,6 +14,13 @@
     - [x] 남은 쿨타임 반환 함수 구현
     - [x] 남은 쿨타임 호감 목록에서 표시
 - [ ] 알림기능 구현 (선택)
+    - [ ] 호감표시/사유변경 시 Event 생성
+    - [ ] 이벤트를 처리할 EventListener 생성
+    - [ ] EventListener에서 notification 생성 후 DB에 저장 (readDate = null)
+    - [ ] notification/list에서 자신에게 온 모든 알림 표시
+    - [ ] 알림을 읽은 경우 readDate 업데이트
+    - [ ] notification/list에서 자신에게 온 알림 중 이미 읽은 것을 제외하고 표시
+    - [ ] 테스트 코드 작성
 
 ### 3주차 미션 요약
 
