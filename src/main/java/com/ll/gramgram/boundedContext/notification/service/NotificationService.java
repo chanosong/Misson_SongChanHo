@@ -24,6 +24,8 @@ public class NotificationService {
                 .fromInstaMember(likeablePerson.getFromInstaMember())
                 .toInstaMember(likeablePerson.getToInstaMember())
                 .typeCode("Like")
+                .newGender(likeablePerson.getFromInstaMember().getGender())
+                .newAttractiveTypeCode(likeablePerson.getAttractiveTypeCode())
                 .build();
 
         notificationRepository.save(notification);
@@ -39,6 +41,7 @@ public class NotificationService {
                 .fromInstaMember(likeablePerson.getFromInstaMember())
                 .toInstaMember(likeablePerson.getToInstaMember())
                 .typeCode("ModifyAttractiveType")
+                .newGender(likeablePerson.getFromInstaMember().getGender())
                 .oldAttributeTypeCode(oldAttractiveType)
                 .newAttractiveTypeCode(likeablePerson.getAttractiveTypeCode())
                 .build();

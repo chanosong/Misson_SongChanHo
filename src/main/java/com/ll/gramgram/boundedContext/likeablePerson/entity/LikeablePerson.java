@@ -96,7 +96,7 @@ public class LikeablePerson {
         + "&nbsp;" + getAttractiveTypeDisplayName();
     }
 
-    public String getJdentication() {
+    public String getJdenticon() {
         return Ut.hash.sha256(fromInstaMember.getId() + "_likes_" + toInstaMember.getId());
     }
 }
