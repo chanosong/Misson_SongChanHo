@@ -211,6 +211,9 @@ public class LikeablePersonService {
             return RsData.of("F-2", "해당 호감표시를 취소할 권한이 없습니다.");
         }
 
+        // 권한이 있는 경우 쿨타임이 지났는지 확인
+        if (!likeablePerson.isModifyUnlocked()) return RsData.of("F-4", "호감사유 변경 가능 시간이 %s 남았습니다".formatted(likeablePerson.getModifyUnlockDateRemainStrHuman()));
+
         return RsData.of("S-1", "호감표시취소가 가능합니다.");
     }
 }
