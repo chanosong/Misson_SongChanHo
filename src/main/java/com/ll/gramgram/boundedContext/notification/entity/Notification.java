@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +30,8 @@ public class Notification extends BaseEntity {
 
     private String typeCode; // 호감표시일시 Like, 사유변경일시 ModifyAttractiveType
     private String oldGender; // 해당사항 없을 시 null
-    private int oldAttributeTypeCode; // 해당사항 없을 시 0
+    private int oldAttractiveTypeCode; // 해당사항 없을 시 0
     private String newGender; // 해당사항 없을 시 null
     private int newAttractiveTypeCode; // 해당사항 없을 시 0
+
 }

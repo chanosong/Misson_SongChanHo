@@ -1,7 +1,11 @@
 package com.ll.gramgram.boundedContext.likeablePerson.controller;
 
 
+import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
+import com.ll.gramgram.boundedContext.instaMember.service.InstaMemberService;
+import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.likeablePerson.service.LikeablePersonService;
+import com.ll.gramgram.standard.util.Ut;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -15,8 +19,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,6 +44,9 @@ public class LikeablePersonControllerTests {
 
     @Autowired
     private LikeablePersonService likeablePersonService;
+
+    @Autowired
+    InstaMemberService instaMemberService;
 
     @Test
     @DisplayName("등록 폼(인스타 인증을 안해서 폼 대신 메세지)")
@@ -229,7 +238,7 @@ public class LikeablePersonControllerTests {
                         post("/usr/likeablePerson/like")
                                 .with(csrf())
                                 .param("username", "insta_user4")
-                                .param("attractiveCodeType", "2")
+                                .param("attractiveTypeCode", "1")
                 )
                 .andDo(print());
 
@@ -246,19 +255,20 @@ public class LikeablePersonControllerTests {
     @WithUserDetails("user2")
     void t010() throws Exception {
         ResultActions resultActions;
+        int trial = 11;
         // 10회 진행 (이미 호감 1회 존재)
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < trial; i++) {
             // When
             resultActions = mvc
                     .perform(post("/usr/likeablePerson/like")
                             .with(csrf()) // CSRF 키 생성
                             .param("username", "insta_user0" + i)
-                            .param("attractiveTypeCode", "" + i % 3)
+                            .param("attractiveTypeCode", "" + (i % 3 + 1))
                     )
                     .andDo(print());
             // Then
-            // 1 ~ 9 회까지는
-            if (i != 9) {
+            // 1 ~ 10 회까지는
+            if (i < trial - 1) {
                 resultActions
                         .andExpect(handler().handlerType(LikeablePersonController.class))
                         .andExpect(handler().methodName("like"))
@@ -292,6 +302,14 @@ public class LikeablePersonControllerTests {
                                     .param("attractiveTypeCode", "" + i)
                     )
                     .andDo(print());
+
+            Optional<InstaMember> user3 =  instaMemberService.findByUsername("insta_user3");
+            Optional<InstaMember> user4 =  instaMemberService.findByUsername("insta_user4");
+
+            Optional<LikeablePerson> opLikeablePerson = likeablePersonService.findByfromIdAndToId(user3.get(), user4.get());
+            
+            // 수정 시간 쿨타임 해제
+            Ut.reflection.setFieldValue(opLikeablePerson.get(), "modifyUnlockDate", LocalDateTime.now().minusSeconds(1));
 
             // Then
             resultActions

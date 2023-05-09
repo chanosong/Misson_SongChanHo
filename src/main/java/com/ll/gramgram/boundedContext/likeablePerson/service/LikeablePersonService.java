@@ -127,6 +127,10 @@ public class LikeablePersonService {
 
     // 중복인 경우 호감 타입 코드 비교하여 처리
     public RsData<LikeablePerson> handleDuplicateLikeablePerson(LikeablePerson likeablePerson, String username, int attractiveTypeCode) {
+
+        // 쿨타임 확인 후 지나지 않은 경우 reject
+        if (!likeablePerson.isModifyUnlocked()) return RsData.of("F-4", "호감사유 변경 가능 시간이 %s 남았습니다".formatted(likeablePerson.getModifyUnlockDateRemainStrHuman()));
+
         // 기존 호감 타입 코드
         int beforeTypeCode = likeablePerson.getAttractiveTypeCode();
 
@@ -206,6 +210,9 @@ public class LikeablePersonService {
         if (!Objects.equals(likeablePerson.getFromInstaMember().getId(), fromInstaMember.getId())) {
             return RsData.of("F-2", "해당 호감표시를 취소할 권한이 없습니다.");
         }
+
+        // 권한이 있는 경우 쿨타임이 지났는지 확인
+        if (!likeablePerson.isModifyUnlocked()) return RsData.of("F-4", "호감사유 변경 가능 시간이 %s 남았습니다".formatted(likeablePerson.getModifyUnlockDateRemainStrHuman()));
 
         return RsData.of("S-1", "호감표시취소가 가능합니다.");
     }
