@@ -42,7 +42,7 @@
                                     어떤 <span class="badge badge-primary" th:text="${notification.getNewGender()}"></span>가 당신을 <span
                                         class="badge badge-primary" th:text="${notification.getNewAttractiveTypeCode()}"></span> 때문에 좋아합니다.
                                 </div>
-                                <div th:if="${!notification.getTypeCode().equals('Like')}">
+                                <div th:if="${!notification.getTypeCode().equals('ModifyAttractiveType')}">
                                     어떤 <span class="badge badge-primary" th:text="${notification.getNewGender()}"></span>가 당신에 대한 호감사유를 <span
                                         class="badge badge-primary" th:text="${notification.getOldAttractiveTypeCode()}"></span>에서
                                     <span class="badge badge-primary" th:text="${notification.getNewAttractiveTypeCode()}"></span>으로 변경했습니다.
