@@ -27,6 +27,9 @@ public class NotificationController {
         }
         List<Notification> notifications = notificationService.findByToInstaMember(rq.getMember().getInstaMember());
 
+        // 읽음 처리
+        notificationService.markAsRead(notifications);
+
         model.addAttribute("notification", notifications);
 
         return "usr/notification/list";

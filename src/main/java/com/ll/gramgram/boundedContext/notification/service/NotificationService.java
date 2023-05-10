@@ -47,4 +47,14 @@ public class NotificationService {
     public List<Notification> findByToInstaMember(InstaMember toInstaMember){
         return notificationRepository.findByToInstaMember(toInstaMember);
     }
+
+    @Transactional
+    public RsData markAsRead(List<Notification> notifications) {
+        notifications
+                .stream()
+                .filter(notification -> !notification.isRead())
+                .forEach(Notification::markAsRead);
+
+        return RsData.of("S-1", "읽음 처리 되었습니다.");
+    }
 }
