@@ -19,36 +19,29 @@ public class NotificationService {
     // 호감표시가 일어난 경우 새로운 Noti 생성
     @Transactional
     public RsData<Notification> afterLikeNotify(LikeablePerson likeablePerson) {
-        Notification notification = Notification
-                .builder()
-                .fromInstaMember(likeablePerson.getFromInstaMember())
-                .toInstaMember(likeablePerson.getToInstaMember())
-                .typeCode("Like")
-                .newGender(likeablePerson.getFromInstaMember().getGender())
-                .newAttractiveTypeCode(likeablePerson.getAttractiveTypeCode())
-                .build();
-
-        notificationRepository.save(notification);
-
-        return RsData.of("S-1", "알람 생성 완료", notification);
+        return make(likeablePerson, "LIKE", 0, null);
     }
 
     // 호감사유 변경이 일어난 경우 새로운 Noti 생성
     @Transactional
     public RsData<Notification> afterModifyAttractiveTypeNotify(LikeablePerson likeablePerson, int oldAttractiveType) {
-        Notification notification = Notification
-                .builder()
-                .fromInstaMember(likeablePerson.getFromInstaMember())
+        return make(likeablePerson, "ModifyAttractiveType", oldAttractiveType, likeablePerson.getFromInstaMember().getGender());
+    }
+
+    private RsData<Notification> make(LikeablePerson likeablePerson, String typeCode, int oldAttractiveTypeCode, String oldGender) {
+        Notification notification = Notification.builder()
+                .typeCode(typeCode)
                 .toInstaMember(likeablePerson.getToInstaMember())
-                .typeCode("ModifyAttractiveType")
-                .newGender(likeablePerson.getFromInstaMember().getGender())
-                .oldAttractiveTypeCode(oldAttractiveType)
+                .fromInstaMember(likeablePerson.getFromInstaMember())
+                .oldAttractiveTypeCode(oldAttractiveTypeCode)
+                .oldGender(oldGender)
                 .newAttractiveTypeCode(likeablePerson.getAttractiveTypeCode())
+                .newGender(likeablePerson.getFromInstaMember().getGender())
                 .build();
 
         notificationRepository.save(notification);
 
-        return RsData.of("S-1", "알람 생성 완료", notification);
+        return RsData.of("S-1", "알람 메시지가 생성되었습니다.", notification);
     }
 
     public List<Notification> findByToInstaMember(InstaMember toInstaMember){
