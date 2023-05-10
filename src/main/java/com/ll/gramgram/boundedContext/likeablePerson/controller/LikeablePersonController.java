@@ -115,10 +115,9 @@ public class LikeablePersonController {
 
         return rq.redirectWithMsg("/usr/likeablePerson/list", rsData);
     }
-    
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = {"/toList", "/toList/{gender}"})
-    @ResponseBody
     public String showToList(@PathVariable("gender") Optional<String> gender, Model model) {
         InstaMember instaMember = rq.getMember().getInstaMember();
 
@@ -130,7 +129,7 @@ public class LikeablePersonController {
 
         RsData<List<LikeablePerson>> rsData = likeablePersonService.getReceivedLikeByGender(instaMember, inputGender);
 
-        model.addAttribute("likeablePersons", rsData.getData());
+        model.addAttribute("likeablePeople", rsData.getData());
 
         return "usr/likeablePerson/toList";
     }

@@ -135,14 +135,14 @@ public class LikeablePersonServiceTests {
 
         Member memberUser4 = memberService.findByUsername("user4").orElseThrow();
 
-        RsData<List<LikeablePerson>> likeablePersonWomenRsData = likeablePersonService.getReceivedLikeByGender(memberUser4.getInstaMember(), "M");
+        RsData<List<LikeablePerson>> likeablePeopleWomenRsData = likeablePersonService.getReceivedLikeByGender(memberUser4.getInstaMember(), "M");
 
         assertThat(
-                likeablePersonWomenRsData.isSuccess()
+                likeablePeopleWomenRsData.isSuccess()
         ).isTrue();
 
         assertThat(
-                likeablePersonWomenRsData.getData().size()
+                likeablePeopleWomenRsData.getData().size()
         ).isEqualTo(0);
     }
 }
