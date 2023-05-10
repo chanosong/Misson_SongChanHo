@@ -22,11 +22,18 @@
 
 **[접근 방법]**
 
-- [진행 중]
+- 호감리스트 페이지에서 성별 필터링하여 호감표시 기록 제공
+  - 최초에 생각한 것은 toList에 처음 들어갈 시 여성들에게 온 호감표시를 보여주고 남성 체크시 남성 기록 또한 볼 수 있게 하는 것으로 이해하고 설계
+  - PathVariable을 통해 toList/{gender}의 형태로 검색할 성별을 설정
+  - PathVariable이 없는 경우를 감안하여 Optional<String>으로 gender를 받음
+  - @Query 를 사용하여 JPQL을 직접 작성, fetch join 실행
+  - 테스트 코드 작성
 
 **[특이사항]**
 
-- [진행 중]
+- 나중에 정렬 관련한 기능을 생각하면 PathVariable이 아닌 RequestParam으로 받는 것이 알맞은 것 같다.
+- 모든 성별에게 받은 호감표시 기능을 생각하지 않아 나중에 Optional<gender>가 없는 경우 "ALL"로 설정
+- 모든 성별에게 받은 호감표시를 받기위해 repository에서 함수 따로 지정
 
 - **[Refactoring]**
 
