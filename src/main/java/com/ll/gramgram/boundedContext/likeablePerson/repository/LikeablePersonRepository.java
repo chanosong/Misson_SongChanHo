@@ -17,6 +17,8 @@ public interface LikeablePersonRepository extends JpaRepository<LikeablePerson, 
     // fromInstaMemberId 기준으로 보낸 호감표시 개수 반환
     Long countByFromInstaMemberId(Long fromInstaMemberId);
 
+    List<LikeablePerson> findByToInstaMemberId(Long toInstaMemberId);
+
     // fromInstaMember의 성별, toInstaMemberId 기준으로 호감 리스트
     @Query(value = "SELECT LP FROM LikeablePerson LP JOIN FETCH InstaMember M ON LP.fromInstaMember = M " +
             "WHERE LP.toInstaMember.id = :toInstaMemberId AND LP.fromInstaMember.gender = :fromInstaMemberGender")

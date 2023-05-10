@@ -121,8 +121,9 @@ public class LikeablePersonController {
     public String showToList(@PathVariable("gender") Optional<String> gender, Model model) {
         InstaMember instaMember = rq.getMember().getInstaMember();
 
-        //
-        String inputGender = "W";
+
+        String inputGender = "ALL";
+
         if (gender.isPresent()){
             inputGender = gender.get();
         }
