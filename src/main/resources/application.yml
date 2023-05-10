@@ -1,10 +1,3 @@
-server:
-  port: 443
-  ssl:
-    enabled: true
-    key-store-type: PKCS12
-    key-store-password: 123456
-    key-store: keystore.p12
 spring:
   mvc:
     hiddenmethod:
@@ -29,12 +22,12 @@ spring:
             scope:
             client-name: Kakao
             authorization-grant-type: authorization_code
-            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
+            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
             client-authentication-method: POST
           google:
             clientId: ${google-client-id}
             client-secret: ${google-client-secret}
-            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
+            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
             client-name: Google
             scope:
               - email
@@ -44,12 +37,12 @@ spring:
             client-secret: ${facebook-client-secret}
             client-name: Facebook
             scope:
-            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
+            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
           instagram:
             clientId: ${instagram-client-id}
             client-secret: ${instagram-client-secret}
             client-name: Instagram
-            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            redirect-uri: '${custom.site.baseUrl}/login/oauth2/code/{registrationId}'
             scope:
               - user_profile
               - user_media
@@ -63,7 +56,7 @@ spring:
               - email
             client-name: Naver
             authorization-grant-type: authorization_code
-            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
+            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
@@ -98,3 +91,6 @@ likeablePerson:
   from:
     max: 10
   modifyCoolTime: '#{60 * 60 * 3}'
+custom:
+  site:
+    baseUrl: http://localhost
