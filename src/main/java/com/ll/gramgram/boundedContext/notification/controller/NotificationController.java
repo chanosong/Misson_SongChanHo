@@ -30,7 +30,7 @@ public class NotificationController {
         // 읽음 처리
         notificationService.markAsRead(notifications);
 
-        model.addAttribute("notification", notifications);
+        model.addAttribute("notifications", notifications);
 
         return "usr/notification/list";
     }

@@ -13,12 +13,12 @@
             알림
         </h1>
 
-        <div class="text-center mt-10" th:if="${#lists.isEmpty(notification)}">
+        <div class="text-center mt-10" th:if="${#lists.isEmpty(notifications)}">
             <i class="fa-regular fa-face-laugh"></i> 최근에 받은 알림이 없습니다.
         </div>
 
-        <ul class="flex flex-col gap-4" th:if="${!#lists.isEmpty(notification)}">
-            <li th:each="notification: ${notification}">
+        <ul class="flex flex-col gap-4" th:if="${!#lists.isEmpty(notifications)}">
+            <li class="card bg-base-100 shadow-xl" th:each="notification : ${notifications}">
                 <div class="flex flex-col gap-4">
                     <div class="card bg-base-100 shadow-xl">
                         <div class="card-body">
@@ -38,7 +38,7 @@
                                     <i class="fa-regular fa-message"></i>
                                     내용
                                 </div>
-                                <div th:if="${notification.getTypeCode().equals('Like')}">
+                                <div th:if="${notification.getTypeCode().equals('LIKE')}">
                                     어떤 <span class="badge badge-primary" th:text="${notification.getNewGender()}"></span>가 당신을 <span
                                         class="badge badge-primary" th:text="${notification.getNewAttractiveTypeCode()}"></span> 때문에 좋아합니다.
                                 </div>
