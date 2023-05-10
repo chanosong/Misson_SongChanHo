@@ -372,4 +372,36 @@ public class LikeablePersonControllerTests {
                 .andExpect(status().is3xxRedirection());
         ;
     }
+
+    @Test
+    @DisplayName("pathVariable 없는 경우 toList")
+    @WithUserDetails("user3")
+    void t014() throws Exception {
+        //WHEN
+        ResultActions resultActions = mvc
+                .perform(get("/usr/likeablePerson/toList").with(csrf()))
+                .andDo(print());
+
+        //THEN
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("showToList"))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    @DisplayName("pathVariable 있는 경우 toList")
+    @WithUserDetails("user3")
+    void t015() throws Exception {
+        //WHEN
+        ResultActions resultActions = mvc
+                .perform(get("/usr/likeablePerson/toList/M").with(csrf()))
+                .andDo(print());
+
+        //THEN
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("showToList"))
+                .andExpect(status().is2xxSuccessful());
+    }
 }

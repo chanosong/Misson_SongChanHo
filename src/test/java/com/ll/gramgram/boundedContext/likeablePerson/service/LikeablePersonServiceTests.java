@@ -17,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -109,5 +110,39 @@ public class LikeablePersonServiceTests {
         assertThat(
                 likeablePersonRsData.isFail()
         ).isTrue();
+    }
+
+    @Test
+    @DisplayName("성별에 따른 호감표시 기록 출력 - 여성")
+    void t006() throws Exception {
+
+        Member memberUser4 = memberService.findByUsername("user4").orElseThrow();
+
+        RsData<List<LikeablePerson>> likeablePersonWomenRsData = likeablePersonService.getReceivedLikeByGender(memberUser4.getInstaMember(), "W");
+
+        assertThat(
+                likeablePersonWomenRsData.isSuccess()
+        ).isTrue();
+
+        assertThat(
+                likeablePersonWomenRsData.getData().size()
+        ).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("성별에 따른 호감표시 기록 출력 - 남성")
+    void t007() throws Exception {
+
+        Member memberUser4 = memberService.findByUsername("user4").orElseThrow();
+
+        RsData<List<LikeablePerson>> likeablePersonWomenRsData = likeablePersonService.getReceivedLikeByGender(memberUser4.getInstaMember(), "M");
+
+        assertThat(
+                likeablePersonWomenRsData.isSuccess()
+        ).isTrue();
+
+        assertThat(
+                likeablePersonWomenRsData.getData().size()
+        ).isEqualTo(0);
     }
 }

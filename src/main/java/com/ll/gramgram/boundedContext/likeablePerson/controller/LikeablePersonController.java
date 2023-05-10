@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/usr/likeablePerson")
@@ -114,12 +115,23 @@ public class LikeablePersonController {
 
         return rq.redirectWithMsg("/usr/likeablePerson/list", rsData);
     }
-
+    
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/toList")
+    @GetMapping(value = {"/toList", "/toList/{gender}"})
     @ResponseBody
-    public String showToList(Model model) {
-        //TODO : showToList 구현 해야함
-        return "usr/likeablePerson/toList 구현해야 함";
+    public String showToList(@PathVariable("gender") Optional<String> gender, Model model) {
+        InstaMember instaMember = rq.getMember().getInstaMember();
+
+        //
+        String inputGender = "W";
+        if (gender.isPresent()){
+            inputGender = gender.get();
+        }
+
+        RsData<List<LikeablePerson>> rsData = likeablePersonService.getReceivedLikeByGender(instaMember, inputGender);
+
+        model.addAttribute("likeablePersons", rsData.getData());
+
+        return "usr/likeablePerson/toList";
     }
 }

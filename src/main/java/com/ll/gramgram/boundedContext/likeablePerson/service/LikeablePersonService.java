@@ -216,4 +216,12 @@ public class LikeablePersonService {
 
         return RsData.of("S-1", "호감표시취소가 가능합니다.");
     }
+
+    public RsData getReceivedLikeByGender(InstaMember instaMember, String gender) {
+        
+        // toInstaMember의 성별을 기준으로 호감표시 기록 로드
+        List<LikeablePerson> likeablePersonList = likeablePersonRepository.findByToInstaMemberIdAndFromInstaMemberGender(instaMember.getId(), gender);
+
+        return RsData.of("S-1", "%s에게서 받은 호감 표시입니다.".formatted(gender), likeablePersonList);
+    }
 }
