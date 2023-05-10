@@ -59,21 +59,7 @@ public class LikeablePerson {
 
     // 초 단위에서 올림 해주세요.
     public String getModifyUnlockDateRemainStrHuman() {
-        StringBuilder remainCoolTime = new StringBuilder();
-
-        // long diffHours = modifyUnlockDate.until(LocalDateTime.now(), ChronoUnit.HOURS);
-        long diffMinutes = LocalDateTime.now().until(modifyUnlockDate, ChronoUnit.MINUTES);
-        int leftHours = (int) diffMinutes / 60;
-        int leftMinutes = (int) (diffMinutes) % 60;
-
-        // 1시간 이상 남았을 경우 시간 단위 추가
-        if (leftHours > 0) {
-            remainCoolTime.append(leftHours + "시간 ");
-        }
-        // 분 단위 추가
-        remainCoolTime.append(leftMinutes + "분");
-        
-        return remainCoolTime.toString();
+        return Ut.time.diffFormat1Human(LocalDateTime.now(), modifyUnlockDate);
     }
 
     public RsData updateAttractiveTypeCode(int attractiveTypeCode) {
